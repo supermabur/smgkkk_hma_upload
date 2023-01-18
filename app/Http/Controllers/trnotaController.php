@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\trnota;
 use Illuminate\Http\Request;
 use App\Photo;
+use DB;
 
 class trnotaController extends Controller
 {
@@ -15,7 +16,8 @@ class trnotaController extends Controller
      */
     public function index()
     {
-        //
+        $projek = DB::table('mstProject')->orderby('KdProject')->get();
+        return view('welcome', compact('projek'));
     }
 
     /**
@@ -43,7 +45,7 @@ class trnotaController extends Controller
 
 
         $form_data = [
-            'kdproject' => 'xxx',
+            'kdproject' => $request->kdproject,
             'jenis' => $request->jenis,
             // 'nota' => $image_data
         ];

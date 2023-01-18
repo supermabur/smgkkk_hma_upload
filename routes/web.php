@@ -20,11 +20,12 @@ use App\User;
 
 Route::middleware(['auth'])->group(function(){
 
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    // Route::get('/', function () {
+    //     return view('welcome');
+    // });
     
 
+    Route::resource('/', 'trnotaController');
     Route::resource('upload', 'trnotaController');
 
 });

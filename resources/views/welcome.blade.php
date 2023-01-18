@@ -23,6 +23,18 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="kdproject" class="col-md-2 col-form-label text-md-right">Project</label>
+
+                            <div class="col-md-8">
+                                <select name="kdproject" id="kdproject" class="custom-select" required>
+                                    @foreach ($projek as $d)
+                                        <option value={{ $d->KdProject }}>{{ $d->NamaProject }}</option>                                        
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="input-file" class="col-md-2 col-form-label text-md-right">File</label>
 
                             <div class="col-md-8">
