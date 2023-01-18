@@ -177,6 +177,7 @@
                         $('#formbuku')[0].reset();
                         $("#image-preview").attr("src", "");
                         alert('Penyimpanan Image telah berhasil... ^_^');
+                        location.reload();
                     }
                     if(data.error){
                         console.log(data);
