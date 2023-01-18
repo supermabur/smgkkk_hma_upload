@@ -3,9 +3,9 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-8 mb-5">
             <div class="card">
-                <div class="card-header">Upload Image</div>
+                <div class="card-header font-weight-bold">UPLOAD IMAGE</div>
 
                 <div class="card-body">
                     <form method="POST" id="formbuku" enctype="multipart/form-data" >
@@ -62,6 +62,47 @@
                 </div>
             </div>
         </div>
+
+
+
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header font-weight-bold">5 IMAGE TERBARU</div>
+
+                <div class="card-body">
+
+                    @foreach ($nota as $d)
+                        <div class="row">
+                            <div class="col-md-6">
+                                <img src="data:{{ $d->nota }};base64, {{ base64_encode($d->nota) }}" class="w-100">
+                            </div>
+
+                            <div class="col-md-6">
+                                <p class="font-weight-bold mb-0">{{ $d->namaproject }}</p>
+                                <p class="mb-0">{{ $d->tanggal }}</p>
+                                <p class="mb-0">{{ $d->jenis }}</p>
+                                <p class="mb-0">
+                                    <form action="/upload/{{$d->id }}" method="POST" class="formdelete d-inline">
+                                        @method('delete')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                    </form>
+                                </p>
+                            </div>
+
+                        </div>
+
+                        @if ( $nota->last() != $d )
+                            <hr class="my-4">                            
+                        @endif
+                    @endforeach
+
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 
@@ -85,6 +126,14 @@
 
 
     $(document).ready(function() {
+        $('.formdelete').on('submit', function(event){
+            let text = "Anda yakin akan menghapus nota ini?";
+            if (confirm(text) != true) {
+                event.preventDefault();
+                return;
+            }
+        });
+
 
         $('#formbuku').on('submit', function(event){
             event.preventDefault();

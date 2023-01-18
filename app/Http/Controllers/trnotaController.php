@@ -17,7 +17,9 @@ class trnotaController extends Controller
     public function index()
     {
         $projek = DB::table('mstProject')->orderby('KdProject')->get();
-        return view('welcome', compact('projek'));
+        $nota = DB::table('vwtrnota')->orderby('id', 'desc')->limit(5)->get();
+
+        return view('welcome', compact('projek', 'nota'));
     }
 
     /**
@@ -110,8 +112,10 @@ class trnotaController extends Controller
      * @param  \App\trnota  $trnota
      * @return \Illuminate\Http\Response
      */
-    public function destroy(trnota $trnota)
+    public function destroy($id)
     {
-        //
+        $tmp = trnota::find($id);
+        $tmp->delete();
+        return redirect('/upload')->with('success', 'Data telah dihapus.'); 
     }
 }
