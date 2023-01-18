@@ -114,7 +114,8 @@
                     {
                         console.log(data);
                         $('#formbuku')[0].reset();
-                        alert('Penyimpanan buku telah berhasil. Silahkan masuk ke menu DAFTARKAN BUKU BARU untuk melihat buku tadi');
+                        $("#image-preview").attr("src", "");
+                        alert('Penyimpanan Image telah berhasil... ^_^');
                     }
                     if(data.error){
                         console.log(data);
