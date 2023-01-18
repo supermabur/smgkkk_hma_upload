@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::middleware(['auth'])->group(function(){
+
+    Route::get('/', function () {
+        return view('welcome');
+    });
+    
+
+    Route::resource('upload', 'trnotaController');
+
 });
 
 Auth::routes();

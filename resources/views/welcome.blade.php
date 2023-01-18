@@ -1,100 +1,131 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
 
-        <title>Laravel</title>
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Upload Image</div>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
+                <div class="card-body">
+                    <form method="POST" id="formbuku" enctype="multipart/form-data" >
+                        @csrf
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
+                        <div class="form-group row">
+                            <label for="jenis" class="col-md-2 col-form-label text-md-right">Jenis</label>
 
-            .full-height {
-                height: 100vh;
-            }
+                            <div class="col-md-8">
+                                <select name="jenis" id="jenis" class="custom-select" required>
+                                    <option value="Nota">Nota</option>
+                                    <option value="Pelunasan">Pelunasan</option>
+                                </select>
+                            </div>
+                        </div>
 
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
+                        <div class="form-group row">
+                            <label for="input-file" class="col-md-2 col-form-label text-md-right">File</label>
 
-            .position-ref {
-                position: relative;
-            }
+                            <div class="col-md-8">
+                                <input type="file" id="input-file" accept="image/jpg,image/jpeg,image/png" name="input-file" required>
+                            </div>
+                        </div>
 
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
+                        <div class="form-group row">
+                            <label for="password" class="col-md-2 col-form-label text-md-right"></label>
 
-            .content {
-                text-align: center;
-            }
+                            <div class="col-md-8">
+                                <img id="image-preview" class="w-100" src="">
+                            </div>
+                        </div>
 
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://vapor.laravel.com">Vapor</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                        <div class="form-group row mb-0">
+                            <label class="col-md-2 col-form-label text-md-right"></label>
+                            <div class="col-md-8">
+                                <button type="submit" class="btn btn-primary">
+                                    SIMPAN
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+</div>
+
+
+
+@endsection
+
+
+@section('script')
+    <script>
+        $("input[type='file']").change(function(){
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onloadend = function(){
+                $("#image-preview").attr("src", reader.result);
+            }
+            reader.readAsDataURL(file);
+        });
+
+        
+
+
+    $(document).ready(function() {
+
+        $('#formbuku').on('submit', function(event){
+            event.preventDefault();
+
+            // ambil semua inputan di form dan di tambahi array menu----------
+            var fd =  new FormData(this);
+            // fd.append('mode', mod);
+
+            $.ajax({
+                url:"{{ route('upload.store') }}",
+                method:"POST",
+                data: fd,
+                contentType: false,
+                cache:false,
+                processData: false,
+                dataType:"json",
+                success:function(data)
+                {
+                    var html = '';
+                    if(data.errors)
+                    {
+                        // console.log(data.errors.keys);
+                        for(var count = 0; count < data.errors.keys.length; count++)
+                        {  
+                            var v = document.getElementById(data.errors.keys[count]);
+                            if($(v).is("input")){
+                                v.classList.add('is-invalid');
+                                $("<span class='invalid-feedback' role='alert' style='display:block'>" + data.errors.message[count] + "</span>").insertAfter(v);
+                            }
+
+                            if($(v).is("select")){
+                                var w = v.nextSibling;
+                                w.classList.add('is-invalid');
+                                $("<span class='invalid-feedback' role='alert' style='display:block'>" + data.errors.message[count] + "</span>").insertAfter(w);
+                            }
+                        }
+                    }
+                    if(data.success)
+                    {
+                        console.log(data);
+                        $('#formbuku')[0].reset();
+                        alert('Penyimpanan buku telah berhasil. Silahkan masuk ke menu DAFTARKAN BUKU BARU untuk melihat buku tadi');
+                    }
+                    if(data.error){
+                        console.log(data);
+                        alert(data.error);
+                    }
+                    
+                }
+            })
+        });
+
+
+    });
+    </script>
+@endsection
