@@ -35,6 +35,13 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="keterangan" class="col-md-2 col-form-label text-md-right">Keterangan</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="input-file" class="col-md-2 col-form-label text-md-right">File</label>
 
                             <div class="col-md-8">
@@ -82,6 +89,7 @@
                                 <p class="font-weight-bold mb-0">{{ $d->namaproject }}</p>
                                 <p class="mb-0">{{ $d->tanggal }}</p>
                                 <p class="mb-0">{{ $d->jenis }}</p>
+                                <p class="mb-2 small">{{ $d->keterangan }}</p>
                                 <p class="mb-0">
                                     <form action="/upload/{{$d->id }}" method="POST" class="formdelete d-inline">
                                         @method('delete')

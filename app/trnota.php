@@ -14,6 +14,7 @@ class trnota extends Model
         'tanggal',
         'kdproject',
         'jenis',
-        'nota'
+        'nota',
+        'keterangan'
     ];
 }

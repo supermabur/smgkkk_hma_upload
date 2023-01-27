@@ -49,6 +49,7 @@ class trnotaController extends Controller
         $form_data = [
             'kdproject' => $request->kdproject,
             'jenis' => $request->jenis,
+            'keterangan' => $request->keterangan
             // 'nota' => $image_data
         ];
 
